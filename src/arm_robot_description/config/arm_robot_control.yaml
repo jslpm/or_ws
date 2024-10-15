@@ -1,0 +1,18 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 10   # Hz
+
+    test_pid_controller:
+      type: pid_controller/PidController
+
+test_pid_controller:
+  ros__parameters:
+    dof_names:
+      - joint_1
+
+    command_interface: effort
+
+    reference_and_state_interfaces: ["effort"]
+
+    gains:
+      joint_1: {p: 100.0, i: 0.01, d: 10.0}

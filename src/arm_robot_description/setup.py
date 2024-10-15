@@ -17,6 +17,7 @@ setup(
         (os.path.join('share', package_name, 'launch'), glob('launch/*_launch.py')),
         (os.path.join('share', package_name, 'urdf'), glob('urdf/*.urdf')),
         (os.path.join('share', package_name, 'urdf'), glob('urdf/*.xacro')),
+        (os.path.join('share', package_name, 'urdf'), glob('urdf/*.gazebo')),
         (os.path.join('share', package_name, 'rviz'), glob('rviz/*_config.rviz')),
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*.world')),
     ],

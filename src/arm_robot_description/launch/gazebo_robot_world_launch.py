@@ -51,18 +51,11 @@ def generate_launch_description():
     )
 
     # Spawn robot
-    # spawn_robot_node = Node(
-    #     package='gazebo_ros', 
-    #     executable='spawn_entity.py',
-    #     output='screen',
-    #     arguments=['-topic','robot_description','-entity', 'simple_arm'],
-    # )
-    # Spawn robot
     spawn_robot_node = Node(
-        package='gazebo_ros', 
+        package='gazebo_ros',
         executable='spawn_entity.py',
         output='screen',
-        arguments=['-topic', 'robot_description','-entity', 'simple_arm',"-x", "0.0", "-y", "0.0", "-z", "0.0"]
+        arguments=['-topic', 'robot_description','-entity', 'arm_robot',"-x", "0.0", "-y", "0.0", "-z", "0.0", "-R", "0.0", "-P", "0.0", "-Y", "1.5707"]
     )
 
     # Add actions and return Launch Description
