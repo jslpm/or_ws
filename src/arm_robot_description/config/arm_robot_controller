@@ -1,0 +1,65 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    position_controller:
+      type: position_controllers/JointGroupPositionController
+
+position_controller:
+  ros__parameters:
+    joints:
+      - joint_1
+      - joint_2
+    state_publish_rate: 50
+    command_publish_rate: 50
+    interpolation_method: linear
+
+    # PID parameters for each joint
+    joint_1:
+      pid:
+        p: 100.0
+        i: 0.01
+        d: 10.0
+        i_clamp_min: -0.5
+        i_clamp_max: 0.5
+    joint_2:
+      pid:
+        p: 120.0
+        i: 0.02
+        d: 15.0
+        i_clamp_min: -0.5
+        i_clamp_max: 0.5
+    # interface_name: position
+    # command_interfaces:
+    #   - position
+    # state_interfaces:
+    #   - position
+    #   - velocity
+        # state_publish_rate: 50
+        # command_publish_rate: 50
+        # interpolation_method: linear
+        # constraints:
+        #   goal_time: 0.5
+        #   stopped_velocity_tolerance: 0.01
+        # position:
+        #   joint_1: { trajectory: 0.1, goal: 0.1 }
+        #   joint_2: { trajectory: 0.1, goal: 0.1 }
+
+        # PID parameters for each joint
+        # joint_1:
+        #   pid:
+        #     p: 100.0 # Proportional gain
+        #     i: 0.01 # Integral gain
+        #     d: 10.0 # Derivative gain
+        #     i_clamp_min: -0.5 # Min limit for integral term
+        #     i_clamp_max: 0.5 # Max limit for integral term
+        # joint_2:
+        #   pid:
+        #     p: 120.0
+        #     i: 0.02
+        #     d: 15.0
+        #     i_clamp_min: -0.5
+        #     i_clamp_max: 0.5

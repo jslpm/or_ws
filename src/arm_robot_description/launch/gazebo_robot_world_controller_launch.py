@@ -1,4 +1,4 @@
-# gazebo_robot_world_launch.py
+# gazebo_robot_world_controller_launch.py
 
 import os
 
@@ -32,7 +32,6 @@ def generate_launch_description():
     controllers_path = package_path / 'config' / 'arm_robot_controller.yaml'
     
     # Declare arguments for the world file and other configurations
-    
     world_path = package_path / 'worlds' / 'numbers.world'
     world_file = LaunchConfiguration('world')
 
@@ -64,6 +63,31 @@ def generate_launch_description():
         output='screen',
         arguments=['-topic', 'robot_description','-entity', 'arm_robot',"-x", "0.0", "-y", "0.0", "-z", "0.0", "-R", "0.0", "-P", "0.0", "-Y", "1.5707"]
     )
+
+    # # Controller Manager
+    # controller_manager_node = Node(
+    #     package='controller_manager',
+    #     executable='ros2_control_node',
+    #     parameters=[{'robot_description': ParameterValue(robot_description, value_type=str), 
+    #                 'config_file': str(controllers_path)}],
+    #     output='screen'
+    # )
+    
+    # # Joint State Broadcaster
+    # joint_state_broadcaster_node = Node(
+    #     package='controller_manager',
+    #     executable='spawner',
+    #     arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
+    #     output='screen'
+    # )
+
+    # # Joint Trajectory Controller
+    # controller_spawner_node = Node(
+    #     package='controller_manager',
+    #     executable='spawner',
+    #     arguments=['arm_robot_position_controller', '-c', '/controller_manager'],
+    #     output='screen'
+    # )
     
 
     # Add actions and return Launch Description
@@ -72,4 +96,7 @@ def generate_launch_description():
         robot_state_publisher_node,
         gazebo_process,
         spawn_robot_node,
+        # controller_manager_node,
+        # joint_state_broadcaster_node,
+        # controller_spawner_node
     ])
