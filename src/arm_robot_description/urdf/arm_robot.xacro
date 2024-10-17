@@ -6,21 +6,13 @@
     <xacro:property name="mass1" value="50" />
     <xacro:property name="mass2" value="10" />
     <xacro:property name="mass3" value="1" />
-    <xacro:property name="radius1" value="0.3" /> <!--base_link
-    radius-->
-    <xacro:property name="radius2" value="0.1" /> <!--link_1
-    radius-->
-    <xacro:property name="radius3" value="0.1" /> <!--link_2
-    radius-->
-    <xacro:property name="length1" value="0.2" /> <!--link_1
-    length-->
-    <xacro:property name="length2" value="1.0" /> <!--link_2
-    length-->
-    <xacro:property name="length3" value="0.75" /> <!--link_3
-    length-->
-    <xacro:property name="camera_size" value="0.1" /> <!--camera
-    size-->
-
+    <xacro:property name="radius1" value="0.3" /> <!--base_link radius-->
+    <xacro:property name="radius2" value="0.1" /> <!--link_1 radius-->
+    <xacro:property name="radius3" value="0.1" /> <!--link_2 radius-->
+    <xacro:property name="length1" value="0.2" /> <!--link_1 length-->
+    <xacro:property name="length2" value="1.0" /> <!--link_2 length-->
+    <xacro:property name="length3" value="0.75" /> <!--link_3 length-->
+    <xacro:property name="camera_size" value="0.1" /> <!--camera size-->
 
     <!-- Import gazebo elements-->
     <xacro:include filename="$(find arm_robot_description)/urdf/arm_robot.gazebo" />
@@ -38,7 +30,7 @@
             <material name="white">
                 <color rgba="1.0 1.0 1.0 1.0" />
             </material>
-        </visual>
+        </visual>n for the joints seems fine, assuming your robot uses position control for its joints. Make sure 
         <collision>
             <origin xyz="0 0 ${length1/2}" rpy="0 0 0" />
             <geometry>
@@ -112,16 +104,12 @@
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <!--mesh
-                filename="package://simple_arm/meshes/camera.dae"/-->
                 <sphere radius="${camera_size}" />
             </geometry>
         </collision>
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <!--mesh
-                filename="package://simple_arm/meshes/camera.dae"/-->
                 <sphere radius="${camera_size}" />
             </geometry>
             <material name="red">
@@ -148,8 +136,7 @@
         <axis xyz="0 0 1" />
         <origin xyz="0 0 ${length1}" rpy="0 0 0" />
         <limit upper="${2*PI}" lower="${-2*PI}" effort="30" velocity="1.0" />
-        <!-- <safety_controller k_velocity="10" k_position="15" soft_lower_limit="-2.0"
-        soft_upper_limit="0.5" /> -->
+        <!-- <safety_controller k_velocity="10" k_position="15" soft_lower_limit="-2.0" soft_upper_limit="0.5" /> -->
     </joint>
 
     <joint name="joint_2" type="revolute">
@@ -158,10 +145,8 @@
         <axis xyz="0 1 0" />
         <origin xyz="0 ${2*radius2} ${length2-radius2}" rpy="0 0 0" />
         <limit upper="${2*PI}" lower="${-2*PI}" effort="30" velocity="1.0" />
-        <!-- <safety_controller k_velocity="10" k_position="15" soft_lower_limit="-2.0"
-        soft_upper_limit="0.5" /> -->
+        <!-- <safety_controller k_velocity="10" k_position="15" soft_lower_limit="-2.0" soft_upper_limit="0.5" /> -->
     </joint>
-
 
     <joint name="camera_joint" type="fixed">
         <axis xyz="0 0 1" />
@@ -171,7 +156,7 @@
     </joint>
 
 
-    <!-- ros2_control configuration -->
+    <!-- ROS2_CONTROL CONFIGURATION -->
     <ros2_control name="GazeboSystem" type="system">
         <hardware>
             <plugin>gazebo_ros2_control/GazeboSystem</plugin>
@@ -188,7 +173,6 @@
             <state_interface name="position" />
             <state_interface name="velocity" />
         </joint>
-
     </ros2_control>
 
 </robot>

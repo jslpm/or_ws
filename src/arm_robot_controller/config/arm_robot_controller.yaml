@@ -5,39 +5,26 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    position_controller:
-      type: position_controllers/JointGroupPositionController
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
 
-position_controller:
+joint_trajectory_controller:
   ros__parameters:
     joints:
       - joint_1
       - joint_2
-    state_publish_rate: 50
-    command_publish_rate: 50
-    interpolation_method: linear
+    interface_name: position
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
 
-    # PID parameters for each joint
-    joint_1:
-      pid:
-        p: 100.0
-        i: 0.01
-        d: 10.0
-        i_clamp_min: -0.5
-        i_clamp_max: 0.5
-    joint_2:
-      pid:
-        p: 120.0
-        i: 0.02
-        d: 15.0
-        i_clamp_min: -0.5
-        i_clamp_max: 0.5
-    # interface_name: position
-    # command_interfaces:
-    #   - position
-    # state_interfaces:
-    #   - position
-    #   - velocity
+    # joint_1:
+    #   pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp_min: -0.5, i_clamp_max: 0.5}
+    # joint_2:
+    #   pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp_min: -0.5, i_clamp_max: 0.5}
+
         # state_publish_rate: 50
         # command_publish_rate: 50
         # interpolation_method: linear
