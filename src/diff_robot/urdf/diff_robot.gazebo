@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<robot>
+
+    <!--chassis link-->
+    <gazebo reference="chassis">
+        <material>Gazebo/Red</material>
+    </gazebo>
+
+    <!--left_wheel
+    link-->
+    <gazebo reference="left_wheel">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <!--right_wheel
+    link-->
+    <gazebo reference="right_wheel">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <!--camera
+    link-->
+    <!-- <gazebo reference="camera">
+        <material>Gazebo/Purple</material>
+    </gazebo> -->
+
+    <!--hokuyo
+    link-->
+    <!-- <gazebo reference="hokuyo">
+        <material>Gazebo/Green</material>
+    </gazebo> -->
+
+    <!--imi
+    link-->
+    <gazebo reference="imu">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <!-- Differential controller -->
+    <gazebo>
+        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+            <robotNamespace>/diff_robot</robotNamespace>
+            <parameters>$(find diff_robot)/config/diff_controller.yaml</parameters>
+        </plugin>
+    </gazebo>
+
+    <!-- camera -->
+    <gazebo reference="camera">
+        <sensor type="camera" name="camera1">
+            <always_on>true</always_on>
+            <visualize>false</visualize>
+            <update_rate>10.0</update_rate>
+            <camera>
+                <horizontal_fov>1.3962634</horizontal_fov>
+                <image>
+                    <width>640</width>
+                    <height>480</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.05</near>
+                    <far>10</far>
+                </clip>
+                <!-- <distortion>
+                    <k1>0.1</k1>
+                    <k2>0.2</k2>
+                    <k3>0.3</k3>
+                    <p1>0.4</p1>
+                    <p2>0.5</p2>
+                </distortion> -->
+            </camera>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <camera_name>camera</camera_name>
+                <frame_name>camera</frame_name>
+                <hack_baseline>1</hack_baseline>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+    <!-- hokuyo -->
+    <gazebo reference="hokuyo">
+        <sensor name="laser" type="gpu_ray">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-3.14</min_angle>
+                        <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>12</max>
+                </range>
+                <noise type="gaussian">
+                    <mean>0.0</mean>
+                    <stddev>0.01</stddev>
+                </noise>
+            </ray>
+            <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <!-- <namespace>diff_robot</namespace> -->
+                    <remapping>~/out:=scan</remapping>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <!-- <frame_name>hokuyo</frame_name> -->
+            </plugin>
+        </sensor>
+    </gazebo>
+
+    <gazebo reference="imu">
+        <sensor name="imu" type="imu">
+            <always_on>true</always_on>
+            <!-- Publish at 30 hz -->
+            <update_rate>30</update_rate>
+            <imu>
+                <angular_velocity>
+                    <x>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.001</stddev>
+                        </noise>
+                    </x>
+                    <y>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.001</stddev>
+                        </noise>
+                    </y>
+                    <z>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.001</stddev>
+                        </noise>
+                    </z>
+                </angular_velocity>
+                <linear_acceleration>
+                    <x>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.001</stddev>
+                        </noise>
+                    </x>
+                    <y>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.001</stddev>
+                        </noise>
+                    </y>
+                    <z>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.001</stddev>
+                        </noise>
+                    </z>
+                </linear_acceleration>
+            </imu>
+            <plugin name="imu_controller" filename="libgazebo_ros_imu_sensor.so">
+                <initial_orientation_as_reference>false</initial_orientation_as_reference>
+                <ros>
+                    <!-- Will publish to /imu/data -->
+                    <!-- <namespace>/imu</namespace> -->
+                    <remapping>~/out:=imu</remapping>
+                </ros>
+                <!-- frame_name ommited, will be "my_link" -->
+            </plugin>
+        </sensor>
+    </gazebo>
+
+</robot>

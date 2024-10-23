@@ -28,9 +28,6 @@ def generate_launch_description():
     xacro_path = os.path.join(get_package_share_directory(package_name), 'urdf', 'arm_robot.xacro')
     robot_description = Command(['xacro ', str(xacro_path)])
     
-    # Controller config path
-    controllers_path = package_path / 'config' / 'arm_robot_controller.yaml'
-    
     # Declare arguments for the world file and other configurations
     
     world_path = package_path / 'worlds' / 'numbers.world'

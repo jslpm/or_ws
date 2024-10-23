@@ -27,10 +27,4 @@ def generate_launch_description():
             cmd=['gazebo', '--verbose', world_file],
             output='screen'
         ),
-
-        # Launch Gazebo client
-        # ExecuteProcess(
-        #     cmd=['gzclient'],
-        #     output='screen'
-        # ),
     ])

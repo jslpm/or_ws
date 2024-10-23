@@ -1,11 +1,11 @@
 <?xml version='1.0'?>
-<robot name="mobile_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="diff_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <!-- <xacro:include filename="$(find diff_robot_description)/urdf/diff_robot.gazebo" /> -->
+    <xacro:include filename="$(find diff_robot)/urdf/diff_robot.gazebo" />
 
     <!-- LINKS -->
 
-    <link name="robot_footprint"></link>
+    <link name="base_footprint"></link>
 
     <link name='chassis'>
         <pose>0 0 0.1 0 0 0</pose>
@@ -117,8 +117,8 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 1.5707 0" />
             <geometry>
-                <box size="0.05 0.05 0.05" />
-                <!-- <mesh filename = "package://mobile_robot_description/meshes/camera.dae" scale="0.5 0.5 0.5"/> -->
+                <!-- <box size="0.05 0.05 0.05" /> -->
+                <mesh filename = "file://$(find diff_robot)/meshes/camera.dae" scale="0.5 0.5 0.5"/>
             </geometry>
             <material name="magenta">
                 <color rgba="0.96 0 0.53 1" />
@@ -143,8 +143,8 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <box size="0.1 0.1 0.1" />
-                <!-- <mesh filename = "package://mobile_robot_description/meshes/hokuyo.dae"/> -->
+                <!-- <box size="0.1 0.1 0.1" /> -->
+                <mesh filename = "file://$(find diff_robot)/meshes/hokuyo.dae"/>
             </geometry>
             <material name="green">
                 <color rgba="0 1 0 1" />
@@ -166,10 +166,38 @@
 
     </link>
 
+    <link name="imu">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.05 0.05 0.025" />
+            </geometry>
+            <material name="blue">
+                <color rgba="0 0 1 1" />
+            </material>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.05 0.05 0.025" />
+            </geometry>
+        </collision>
+
+        <inertial>
+            <mass value="1e-5" />
+            <origin xyz="0.0 0 0" rpy=" 0 0 0" />
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        </inertial>
+
+    </link>
+
+
+
     <!-- JOINTS -->
-    <joint name="robot_footprint_joint" type="fixed">
+    <joint name="base_footprint_joint" type="fixed">
         <origin xyz="0 0 0.1" rpy="0 0 0" />
-        <parent link="robot_footprint" />
+        <parent link="base_footprint" />
         <child link="chassis" />
     </joint>
 
@@ -179,7 +207,7 @@
         <parent link="chassis" />
         <axis xyz="0 1 0" rpy="0 0 0" />
         <limit effort="10000" velocity="1000" />
-        <dynamics damping="1.0" friction="1.0" />
+        <dynamics damping="0.02" friction="0.1" />
     </joint>
 
     <joint type="continuous" name="right_wheel_joint">
@@ -188,7 +216,7 @@
         <parent link="chassis" />
         <axis xyz="0 1 0" rpy="0 0 0" />
         <limit effort="10000" velocity="1000" />
-        <dynamics damping="1.0" friction="1.0" />
+        <dynamics damping="0.02" friction="0.1" />
     </joint>
 
     <joint type="fixed" name="camera_joint">
@@ -199,9 +227,41 @@
     </joint>
 
     <joint type="fixed" name="hokuyo_joint">
-        <origin xyz="0.15 0 0.1" rpy="0 0 0" />
+        <origin xyz="0.15 0 0.085" rpy="0 0 0" />
         <child link="hokuyo" />
         <parent link="chassis" />
     </joint>
+
+    <joint type="fixed" name="imu_joint">
+        <origin xyz="0 0 0.0625" rpy="0 0 0" />
+        <child link="imu" />
+        <parent link="chassis" />
+    </joint>
+
+
+    <!-- diff controller -->
+    <ros2_control name="GazeboSystem" type="system">
+        <hardware>
+            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </hardware>
+        <joint name="left_wheel_joint">
+            <command_interface name="velocity">
+                <param name="min">-10</param>
+                <param name="max">10</param>
+            </command_interface>
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+            <state_interface name="effort" />
+        </joint>
+        <joint name="right_wheel_joint">
+            <command_interface name="velocity">
+                <param name="min">-10</param>
+                <param name="max">10</param>
+            </command_interface>
+            <state_interface name="velocity" />
+            <state_interface name="position" />
+            <state_interface name="effort" />
+        </joint>
+    </ros2_control>
 
 </robot>
